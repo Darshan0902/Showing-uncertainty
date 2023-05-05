@@ -61,3 +61,36 @@ OUTPUT :
 
 https://raw.githubusercontent.com/Darshan0902/Showing-uncertainty/563c9718cba9bd08329757e5fb243e6d862b83fd//image-2.png
 
+# Making a confidence band :
+
+
+1. Construct upper and lower 99% interval bands by adding and subtracting 2.58 standard errors from the mean.
+2. Make the point-estimate line white.
+3. Make the point-estimate line semi-transparent by setting alpha to 0.4.
+4. Tell plt.fill_between() what values to fill between for each day.
+
+
+Code:
+
+```
+# Draw 99% inverval bands for average NO2
+vandenberg_NO2['lower'] = vandenberg_NO2['mean'] - 2.58*vandenberg_NO2['std_err']
+vandenberg_NO2['upper'] = vandenberg_NO2['mean'] + 2.58*vandenberg_NO2['std_err']
+
+# Plot mean estimate as a white semi-transparent line
+plt.plot('day', 'mean', data = vandenberg_NO2,
+         color = 'white', alpha = 0.4)
+
+# Fill between the upper and lower confidence band values
+plt.fill_between(x = 'day', 
+                 y1 = 'lower', y2 = 'upper', 
+                 data = vandenberg_NO2)
+
+plt.show()
+```
+
+output : 
+
+https://raw.githubusercontent.com/Darshan0902/Showing-uncertainty/563c9718cba9bd08329757e5fb243e6d862b83fd//image-3.png
+
+
