@@ -1,2 +1,63 @@
 # Basic confidence intervals
 
+Create the lower and upper 95% interval boundaries:
+Create the lower boundary by subtracting 1.96 standard errors ('std_err') from the 'mean' of estimates.
+Create the upper boundary by adding 1.96 standard errors ('std_err') to the 'mean' of estimates.
+Pass pollutant as the faceting variable to sns.FacetGrid() and unlink the x-axes of the plots so intervals are all well-sized.
+Pass the constructed interval boundaries to the mapped plt.hlines() function.
+
+```
+# Construct CI bounds for averages
+average_ests['lower'] = average_ests['mean'] - 1.96*average_ests['std_err']
+average_ests['upper'] = average_ests['mean'] + 1.96*average_ests['std_err']
+
+# Setup a grid of plots, with non-shared x axes limits
+g = sns.FacetGrid(average_ests, row = 'pollutant', sharex = False)
+
+# Plot CI for average estimate
+g.map(plt.hlines, 'y', 'lower', 'upper')
+
+# Plot observed values for comparison and remove axes labels
+g.map(plt.scatter, 'seen', 'y', color = 'orangered').set_ylabels('').set_xlabels('') 
+
+plt.show()
+
+```
+
+OUTPUT :
+
+https://github.com/Darshan0902/Showing-uncertainty/blob/main/image.png?raw=true 
+
+
+
+<h2> Annotating confidence intervals </h2>
+
+<br> Provide starting and ending limits (columns lower and upper) for your confidence intervals to plt.hlines().
+<br> Set interval thickness to 5.
+<br> Draw a vertical line representing a difference of 0 with plt.axvline().
+<br> Color the null line 'orangered' to make it stand out.
+
+```
+# Set start and ends according to intervals 
+# Make intervals thicker
+plt.hlines(y = 'year', xmin = 'lower', xmax = 'upper', 
+           linewidth = 5, color = 'steelblue', alpha = 0.7,
+           data = diffs_by_year)
+# Point estimates
+plt.plot('mean', 'year', 'k|', data = diffs_by_year)
+
+# Add a 'null' reference line at 0 and color orangered
+plt.axvline(x = 0 , color = 'orangered', linestyle = '--')
+
+# Set descriptive axis labels and title
+plt.xlabel('95% CI')
+plt.title('Avg SO2 differences between Cincinnati and Indianapolis')
+plt.show()
+```
+
+
+OUTPUT : 
+
+
+https://raw.githubusercontent.com/Darshan0902/Showing-uncertainty/563c9718cba9bd08329757e5fb243e6d862b83fd//image-2.png
+
